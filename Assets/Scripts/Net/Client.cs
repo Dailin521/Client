@@ -11,10 +11,7 @@ public class Client
     private static Client _instance;
     public static Client Instance()
     {
-        if (_instance == null)
-        {
-            _instance = new();
-        }
+        _instance ??= new();
         return _instance;
     }
     TcpClient client;
@@ -48,6 +45,10 @@ public class Client
                 {
                     Debug.Log($"数据接收长度:{length}");
                     Debug.Log($"数据接收内容:{Encoding.UTF8.GetString(buffer, 0, buffer.Length)}");
+                    //msgLength += length;
+                    //Array.Copy(buffer, 0, data, msgLength, length);
+                    //Handle();
+                    MessageHelper.Instance().CopyToDate(buffer, length);
                 }
                 else
                 {

@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helper\JsonHelper.cs" />
     <Compile Include="Net\Client.cs" />
     <Compile Include="Net\TCPServer.cs" />
     <Compile Include="Program.cs" />
