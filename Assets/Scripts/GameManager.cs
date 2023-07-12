@@ -9,6 +9,9 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Client.Instance().Start();
+        var loginPrefab = Resources.Load<GameObject>("LoginView");
+        var loginView = GameObject.Instantiate(loginPrefab);
+        loginView.AddComponent<LoginView>();
     }
     private void Update()
     {

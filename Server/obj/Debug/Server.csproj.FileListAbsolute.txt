@@ -14,3 +14,5 @@ C:\Users\DAL\source\repos\Client\Server\obj\Debug\Server.csproj.SuggestedBinding
 C:\Users\DAL\source\repos\Client\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
 C:\Users\DAL\source\repos\Client\Server\obj\Debug\Server.exe
 C:\Users\DAL\source\repos\Client\Server\obj\Debug\Server.pdb
+C:\Users\DAL\source\repos\Client\Server\bin\Debug\LitJSON.dll
+C:\Users\DAL\source\repos\Client\Server\obj\Debug\Server.csproj.CopyComplete

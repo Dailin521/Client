@@ -79,7 +79,7 @@ public class MessageHelper
         registerHandle?.Invoke(msgS2C);
     }
 
-    public Action<LoginMsgsS2C> loginHandle;
+    public Action<LoginMsgS2C> loginHandle;
     /// <summary>
     /// 登录（结果）请求
     /// </summary>
@@ -87,16 +87,19 @@ public class MessageHelper
     private void LoginMsgHandle(byte[] msg)
     {
         var str = Encoding.UTF8.GetString(msg);
-        LoginMsgsS2C msgS2C = JsonHelper.ToObject<LoginMsgsS2C>(str);
+        LoginMsgS2C msgS2C = JsonHelper.ToObject<LoginMsgS2C>(str);
         loginHandle?.Invoke(msgS2C);
     }
+    public Action<ChatMsgS2C> chatMsgHandle;
     /// <summary>
     /// 聊天（转发）请求
     /// </summary>
     /// <param name="msg"></param>
     private void ChatMsgHandle(byte[] msg)
     {
-
+        var str = Encoding.UTF8.GetString(msg);
+        ChatMsgS2C msgS2C = JsonHelper.ToObject<ChatMsgS2C>(str);
+        chatMsgHandle?.Invoke(msgS2C);
     }
 
     public void SendToServer(int id, string str)
@@ -136,6 +139,16 @@ public class MessageHelper
         var str = JsonHelper.ToJson(msg);
         SendToServer(1002, str);
     }
+    /// <summary>
+    /// 发送聊天消息
+    /// </summary>
+    /// <param name="account"></param>
+    /// <param name="pwd"></param>
+    public void SendChatMsg(string account, string pwd)
+    {
+        ChatMsgC2S msgC2S = new ChatMsgC2S();
+
+    }
 }
 
 /// <summary>
@@ -152,7 +165,7 @@ public class RegisterMsgS2C
     public string account;
     public string password;
     public string email;
-    public int result;//1成功，0失败
+    public int result;//0成功，1失败
 }
 /// <summary>
 /// 102 登录业务
@@ -162,11 +175,11 @@ public class LoginMsgC2S
     public string account;
     public string password;
 }
-public class LoginMsgsS2C
+public class LoginMsgS2C
 {
     public string account;
     public string password;
-    public int result;//1成功，0失败
+    public int result;//0成功，1失败
 }
 
 /// <summary>
