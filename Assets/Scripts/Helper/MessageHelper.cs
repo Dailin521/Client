@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using UnityEngine;
 
 public class MessageHelper
 {
@@ -46,7 +47,8 @@ public class MessageHelper
                     }
                 }
                 msgLength -= _length;
-                Console.WriteLine($"收到客户端请求：{id}");
+                Debug.Log($"收到服务器消息：{id}");
+
                 switch (id)
                 {
                     case 1001://注册请求
@@ -144,10 +146,14 @@ public class MessageHelper
     /// </summary>
     /// <param name="account"></param>
     /// <param name="pwd"></param>
-    public void SendChatMsg(string account, string pwd)
+    public void SendChatMsg(string account, string chat)
     {
         ChatMsgC2S msgC2S = new ChatMsgC2S();
-
+        msgC2S.player = account;
+        msgC2S.msg = chat;
+        msgC2S.type = 0;
+        var str = JsonHelper.ToJson(msgC2S);
+        SendToServer(1003, str);
     }
 }
 

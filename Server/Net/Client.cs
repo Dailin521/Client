@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using Server.Helper;
+using System;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Server.Net
 {
@@ -31,6 +28,7 @@ namespace Server.Net
                         Console.WriteLine($"接收数据的长度：{length}");
                         Console.WriteLine($"接收数据的内容：{Encoding.UTF8.GetString(buffer, 0, buffer.Length)}");
                         Array.Copy(buffer, 0, data, msgLength, length);
+                        msgLength += length;
                         Handle();
                     }
                     else
@@ -104,7 +102,19 @@ namespace Server.Net
         /// <param name="msg"></param>
         private void RisterMsgHandle(byte[] msg)
         {
-
+            var obj = JsonHelper.ToObject<RegisterMsgC2S>(msg);
+            RegisterMsgS2C response = null;
+            //判断是否已经存在
+            if (PlayerData.Instance.Contain(obj.account))
+            {
+                response = new RegisterMsgS2C();
+                response.result = 1;
+            }
+            else
+            {
+                response = PlayerData.Instance.Add(obj);
+            }
+            SendToClient(1001, JsonHelper.ToJson(response));
         }
         /// <summary>
         /// 登录请求
@@ -112,15 +122,41 @@ namespace Server.Net
         /// <param name="msg"></param>
         private void LoginMsgHandle(byte[] msg)
         {
-
+            //判断账号和密码是否跟缓存的一致
+            var obj = JsonHelper.ToObject<LoginMsgC2S>(msg);
+            LoginMsgS2C response = new LoginMsgS2C();
+            if (PlayerData.Instance.Contain(obj.account))
+            {
+                response.result = 0;//已经存在
+                response.account = obj.account;
+                response.password = obj.password;
+                PlayerData.Instance.AddLoginUser(obj.account, this);
+            }
+            else
+            {
+                response.result = 1;//账号或者密码错误
+            }
+            SendToClient(1002, JsonHelper.ToJson(response));
         }
         /// <summary>
         /// 聊天请求
         /// </summary>
         /// <param name="msg"></param>
-        private void ChatMsgHandle(byte[] msg)
+        private void ChatMsgHandle(byte[] obj)
         {
-
+            //转发给所有在线用户
+            Console.WriteLine("转发聊天消息");
+            var msg = JsonHelper.ToObject<ChatMsgC2S>(obj);
+            ChatMsgS2C sendMsg = new ChatMsgS2C();
+            sendMsg.msg = msg.msg;
+            sendMsg.player = msg.player;
+            sendMsg.type = msg.type;
+            var dct = PlayerData.Instance.GetALLLoginUser();
+            var json = JsonHelper.ToJson(sendMsg);
+            foreach (var item in dct)
+            {
+                item.Value.SendToClient(1003, json);
+            }
         }
 
         public async void Send(byte[] date)

@@ -14,8 +14,10 @@ public class ChatView : MonoBehaviour
     InputField sendInput;
 
     // Start is called before the first frame update
+    [Obsolete]
     void Start()
     {
+
         chatItem = Resources.Load<GameObject>("ChatItem");
         chatItemParent = this.transform.Find("ScrollView/Viewport/Content");
         scrollbar = this.transform.Find("ScrollView/Vertical").GetComponent<Scrollbar>();

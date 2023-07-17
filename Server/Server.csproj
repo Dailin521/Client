@@ -47,8 +47,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helper\JsonHelper.cs" />
+    <Compile Include="Helper\MessageHelper.cs" />
     <Compile Include="Net\Client.cs" />
     <Compile Include="Net\TCPServer.cs" />
+    <Compile Include="PlayerData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
